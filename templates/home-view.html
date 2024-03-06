@@ -1,0 +1,14 @@
+{% extends "index.html" %}
+
+
+{% block content %}
+
+    <header class="header-cln">
+        <h1>Appointment Management System</h1>
+        <button onclick="showFunction()">Show Appointments</button>
+        {% if not request.user.is_staff %}
+            <button onclick="createFunction()">Create Appointment</button>
+        {% endif %}
+        <button onclick="logoutFunction()">Logout</button>
+    </header>
+{% endblock content%}

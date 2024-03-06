@@ -1,0 +1,109 @@
+{% extends 'home-view.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="column centered-div eception-div">
+        {% if appointments %}
+            <p class="header-cln"> List Of Appointments</p>
+            {% if request.user.is_staff %}
+                <div class="center-container-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>appointment id</th>
+                            <th>Title</th>
+                            <th>Datetime</th>
+                            <th>Info</th>
+                            <th>Actions</th>
+                            <th>Status</th>
+                            <th>Patient</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in appointments %}
+                        <tr>
+                            <td>{{ appointment.id }}</td>
+                            <td>{{ appointment.title }}</td>
+                            <td>{{ appointment.datatime }}</td>
+                            <td>
+                                <div class="tooltip">
+                                    <span class="tooltip-content">{{ appointment.detail }}</span>
+                                    <span>ℹ️</span>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="{% url 'appointment_accept' appointment.id %}">Accept</a>
+                                <a href="{% url 'appointment_reject' appointment.id %}">Reject</a>
+                            </td>
+                            <td>
+                                {% if appointment.status is True %}
+                                    Upcoming
+                                {% elif appointment.status is False %}
+                                    Canceled
+                                {% else %}
+                                    Pending
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ appointment.user }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <div class="center-container-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Datetime</th>
+                            <th>Info</th>
+                            <th>Actions</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for appointment in appointments %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ appointment.title }}</td>
+                            <td>{{ appointment.datatime }}</td>
+                            <td>
+                                <div class="tooltip">
+                                    <span class="tooltip-content">{{ appointment.detail }}</span>
+                                    <span>ℹ️</span>
+                                </div>
+                            </td>
+                            <td>
+                                <a href="{% url 'appointment_edit' appointment.id %}">Edit</a>
+                                <a href="{% url 'appointment_delete' appointment.id %}">cancel</a>
+                            </td>
+                            <td>
+                                {% if appointment.status is True %}
+                                    Accepted
+                                {% elif appointment.status is False %}
+                                    Rejected
+                                {% else %}
+                                    Pending
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        {% else %}
+            <h3 class="header-cln"><strong>Not Any Appointments are booked</strong></h3>
+        {% endif %}
+	</div>
+    <div>
+        <br>
+        <a href="{% url 'ams_home' %}" class="redirect-button">
+            <button>Go to Home</button>
+        </a>
+    </div>
+{% endblock content %}

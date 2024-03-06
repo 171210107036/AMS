@@ -1,0 +1,76 @@
+{% extends 'index.html' %}
+
+{% block content %}
+    <div style="margin-top:30px;" class="centered-div">
+        <h2 class="header-cln">Edit Appointment Form</h2>
+        <div class="center-container" style="height:60vh;">
+            <form action="{% url 'appointment_edit' appointment.id %}" method="post">
+                {% csrf_token %}
+                <label>Date:</label>
+                <input type="date" id="date" name="date" required>
+
+                <label>Time:</label>
+                <select id="hour" name="hour" required>
+                    <option value="12" id="12_">12</option>
+                    <option value="01" id="01_">01</option>
+                    <option value="02" id="02_">02</option>
+                    <option value="03" id="03_">03</option>
+                    <option value="04" id="04_">04</option>
+                    <option value="05" id="05_">05</option>
+                </select>
+                :
+                <select id="minute" name="minute" required>
+                    <option value="00">00</option>
+                    <option value="30">30</option>
+                </select>
+                <select id="ampm" name="ampm" required>
+                    <option value="PM">PM</option>
+                </select>
+
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" value="{{ appointment.title }}" required>
+
+                <label for="detail">Detail:</label>
+                <textarea id="detail" name="detail"> {{ appointment.detail }} </textarea>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <div>
+        <br>
+        <a href="{% url 'ams_home' %}" class="redirect-button">
+            <button>Go to Home</button>
+        </a>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('date').value = "{{ appointment.datatime|date:'Y-m-d' }}";
+        });
+        var defaultHourOption = "{{hour}}";
+        if (defaultHourOption !== '12'){
+            defaultHourOption = "0"+defaultHourOption
+        }
+        var hour = document.getElementById('hour');
+        let i;
+        for (i = 0; i < hour.options.length; i++) {
+            if (hour.options[i].value === defaultHourOption) {
+                hour.options[i].selected = true;
+                break;
+            }
+        }
+        var defaultMinuteOption = "{{minute}}";
+        if (defaultMinuteOption !== '30'){
+            defaultMinuteOption = "00"
+        }
+        var minute = document.getElementById('minute');
+        for (i = 0; i < minute.options.length; i++) {
+            if (minute.options[i].value === defaultMinuteOption) {
+                minute.options[i].selected = true;
+                break;
+            }
+        }
+    </script>
+{% endblock content %}
